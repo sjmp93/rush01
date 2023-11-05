@@ -17,29 +17,10 @@
 // We first declare the functions and the variables we are going to use
 
 
-main(int argc, char *argv[]) {
-
-// Variables
-
-// -----------------------------------------
 
 
-int		colup_input[4];
-int		coldown_input[4];
-int		rowleft_input[4];
-int		rowright_input[4];
-int		row;
-int		col;
-int		yesno;
-int		height;
+// Memory allocation
 
-// -----------------------------------------
-
-
-
-
-// Allocation of memory
-// -----------------------------------------
 
 
 int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter)
@@ -78,45 +59,9 @@ int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowl
 }
 
 
-// Allocate memory for the array remaining_heights
-	remaining_heights = malloc(4 * sizeof(int *));
-	// Allocate memory for the first dimension
-	for (row = 0; row < 4; row++)
-		remaining_heights[row] = malloc(4 * sizeof(int));
-	// Allocate memory for the second dimension
-	for (row = 0; row < 4; row++)
-		for (col = 0; col < 4; col++)
-			remaining_heights[row][col] = malloc(4 * sizeof(int));
-	// Initialize array
-	for (row = 0; row < 4; row++)
-		for (col = 0; col < 4; col++)
-			for (int height = 0; height < 4; height++)
-				remaining_heights[row][col][height] = 1;
-			// todas las entradas están disponibles, por eso se inicializan a 1
-
-
-	// Allocate memory for the array remaining_heights_row
-	remaining_heights_row = malloc(4 * sizeof(int *));
-	// Allocate memory for the first dimension
-	for (row = 0; row < 4; row++)
-		remaining_heights_row[row] = malloc(4 * sizeof(int));
-	// Initialize array
-	for (row = 0; row < 4; row++)
-		for (col = 0; col < 4; col++)
-			remaining_heights_row[row][col] = 1;
-			// todas las entradas están disponibles, por eso se inicializan a 4
 
 
 
-// -----------------------------------------
-
-colup_input = [4, 3, 2, 1];
-coldown_input = [1, 2, 2, 2];
-
-rowleft_input = [4, 3, 2, 1];
-rowright_input = [1, 2, 2, 2];
-
-// -----------------------------------------
 
 
 
@@ -270,6 +215,10 @@ int ft_vision(int **board, int row, int col, int *colup_counter, int *coldown_co
 
 
 
+
+
+
+
 // No repetición
 
 int ft_check_repeated_in_row(int **board, int row, int col) {
@@ -326,6 +275,17 @@ int ft_check_non_repeated(int **board, int row, int col)
 {
 	return (ft_check_repeated(board, row, col) == 0);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Contadores parciales
@@ -428,6 +388,8 @@ int ft_check_count(int **board, int *colup_input, int *coldown_input, int *rowle
 
 	return (itsok);
 }
+
+
 
 
 
@@ -539,6 +501,7 @@ int ft_check_count_end(int **board, int *colup_input, int *coldown_input, int *r
 
 
 
+
 int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter) {
 	// Comprueba que el número que se va a poner en esa casilla cumple con todas las condiciones.
 	int itsok;
@@ -558,16 +521,8 @@ int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *
 }
 
 
-	int		**board;
-	int		*colup_counter;
-	int		*coldown_counter;
-	int		*rowleft_counter;
-	int		*rowright_counter;
 
-	// Allocate memory for the arrays
-	mallocation(board, remaining_heights, remaining_heights_row, colup_counter, coldown_counter, rowleft_counter, rowright_counter);
-
-
+// -----------------------------------------
 
 // Resolución
 
@@ -639,26 +594,97 @@ int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowlef
 
 }
 
+
+main(int argc, char *argv[]) {
+
+// Variables
 // -----------------------------------------
+
+int		colup_input[4];
+int		coldown_input[4];
+int		rowleft_input[4];
+int		rowright_input[4];
+int		row;
+int		col;
+int		yesno;
+int		height;
+
+// -----------------------------------------
+
+// Important variables
+
+	int		**board;
+	int		*colup_counter;
+	int		*coldown_counter;
+	int		*rowleft_counter;
+	int		*rowright_counter;
+
+
+
+	// Allocate memory for the array remaining_heights
+	remaining_heights = malloc(4 * sizeof(int *));
+	// Allocate memory for the first dimension
+	for (row = 0; row < 4; row++)
+		remaining_heights[row] = malloc(4 * sizeof(int));
+	// Allocate memory for the second dimension
+	for (row = 0; row < 4; row++)
+		for (col = 0; col < 4; col++)
+			remaining_heights[row][col] = malloc(4 * sizeof(int));
+	// Initialize array
+	for (row = 0; row < 4; row++)
+		for (col = 0; col < 4; col++)
+			for (int height = 0; height < 4; height++)
+				remaining_heights[row][col][height] = 1;
+			// todas las entradas están disponibles, por eso se inicializan a 1
+
+
+	// Allocate memory for the array remaining_heights_row
+	remaining_heights_row = malloc(4 * sizeof(int *));
+	// Allocate memory for the first dimension
+	for (row = 0; row < 4; row++)
+		remaining_heights_row[row] = malloc(4 * sizeof(int));
+	// Initialize array
+	for (row = 0; row < 4; row++)
+		for (col = 0; col < 4; col++)
+			remaining_heights_row[row][col] = 1;
+			// todas las entradas están disponibles, por eso se inicializan a 4
+
+
+
+	// -----------------------------------------
+
+	colup_input = [4, 3, 2, 1];
+	coldown_input = [1, 2, 2, 2];
+
+	rowleft_input = [4, 3, 2, 1];
+	rowright_input = [1, 2, 2, 2];
+
+	// -----------------------------------------
+
+
+	// Allocate memory for the arrays
+	mallocation(board, remaining_heights, remaining_heights_row, colup_counter, coldown_counter, 	rowleft_counter, rowright_counter);
+
+	// -----------------------------------------
 
 	// Si todo va bien, pinta el board usando la función write.
 
-if (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, 0, 0, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row))
-{
-	// print array
-	for (row = 0; row < 4; row++)
+	if (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, 0, 0, 	colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, 	remaining_heights_row))
 	{
-		for (col = 0; col < 4; col++)
-			printf("%2d ", board[row][col]);
-		printf("\n");
+		// print array
+		for (row = 0; row < 4; row++)
+		{
+			for (col = 0; col < 4; col++)
+				printf("%2d ", board[row][col]);
+			printf("\n");
+		}
 	}
-}
-else
-{
-	write(1, "Error\n", 6);
+	else
+	{
+		write(1, "Error\n", 6);
+		return (0);
+
+	}
+
 	return (0);
-
-}
-
-return (0);
 }
