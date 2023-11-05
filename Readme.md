@@ -1,6 +1,8 @@
 
 Nuestro algoritmo completa el juego por filas.
 
+# AL FINAL SE HA IMPLEMENTADO CON ALGUNAS VARIACIONES
+
 
 # Estructuras
 
@@ -80,7 +82,7 @@ RELLENAR (realmente es necesario?)
 
 # Procedimiento
 
-1. Inicializamos las variables `board`, `remaining_heights`, `remaining_heights_row`, `col_counter`, `row_counter`, `col_input` y `row_input` de acuerdo a lo especificado en la sección de _Variables iniciales_.
+1. Inicializamos las variables `**board`, `remaining_heights`, `remaining_heights_row`, `col_counter`, `row_counter`, `col_input` y `row_input` de acuerdo a lo especificado en la sección de _Variables iniciales_.
 2. Traducimos la entrada a las variables `col_input` y `row_input` con la función `ft_input`.
 3. Aplicamos las funciones de restricción (a definir aún), que ayudarán a resolver el problema más rápido. Entre ellas, están las restricciones para las listas de casillas disponibles.
 4. Aplicamos el algoritmo que se describe a continuación:

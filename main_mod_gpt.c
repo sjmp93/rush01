@@ -23,46 +23,65 @@
 // Memory allocation
 
 
+// Pasamos la variable por referencia para que se modifique en la función
 
-int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter)
+int mallocation(int ***board, int ***colup_counter, int ***coldown_counter, int ***rowleft_counter, int ***rowright_counter)
 {
-	int	row;
-	int	col;
+    int row;
+    int col;
 
-	// Allocate memory for the array board
-	board = malloc(4 * sizeof(int *));
-	// Allocate memory for each row
-		for (row = 0; row < 4; row++)
-		board[row] = malloc(4 * sizeof(int));
-	// Initialize array
-	for (row = 0; row < 4; row++)
-		for (col = 0; col < 4; col++)
-			board[row][col] = 0;
+    // Allocate memory for the array board
+    *board = (int **)malloc(4 * sizeof(int *));
+    // Allocate memory for each row
+    for (row = 0; row < 4; row++)
+        (*board)[row] = (int *)malloc(4 * sizeof(int));
+    // Initialize array
+    for (row = 0; row < 4; row++)
+        for (col = 0; col < 4; col++)
+            (*board)[row][col] = 0;
 
+    // Allocate memory for the array colup_counter
+    *colup_counter = (int **)malloc(4 * sizeof(int *));
+    // Allocate memory for each row in colup_counter
+    for (col = 0; col < 4; col++)
+        (*colup_counter)[col] = (int *)malloc(sizeof(int));
 
-	// Allocate memory for the array colup_counter
-	colup_counter = malloc(4 * sizeof(int *));
-	// Allocate memory for the array coldown_counter
-	coldown_counter = malloc(4 * sizeof(int *));
+    // Allocate memory for the array coldown_counter
+    *coldown_counter = (int **)malloc(4 * sizeof(int *));
+    // Allocate memory for each row in coldown_counter
+    for (col = 0; col < 4; col++)
+        (*coldown_counter)[col] = (int *)malloc(sizeof(int));
 
-	// Initialize arrays
-	for (col = 0; col < 4; col++)
-		colup_counter[col] = 0;
-		coldown_counter[col] = 0;
+    // Initialize arrays
+    for (col = 0; col < 4; col++)
+    {
+        (*colup_counter)[col][0] = 0;
+        (*coldown_counter)[col][0] = 0;
+    }
 
+    // Allocate memory for the array rowleft_counter
+    *rowleft_counter = (int **)malloc(4 * sizeof(int *));
+    // Allocate memory for each row in rowleft_counter
+    for (row = 0; row < 4; row++)
+        (*rowleft_counter)[row] = (int *)malloc(sizeof(int));
 
-	// Allocate memory for the array rowleft_counter
-	rowleft_counter = malloc(4 * sizeof(int *));
-	// Allocate memory for the array rowright_counter
-	rowright_counter = malloc(4 * sizeof(int *));
+    // Allocate memory for the array rowright_counter
+    *rowright_counter = (int **)malloc(4 * sizeof(int *));
+    // Allocate memory for each row in rowright_counter
+    for (row = 0; row < 4; row++)
+        (*rowright_counter)[row] = (int *)malloc(sizeof(int));
 
-	// Initialize array
-	for (row = 0; row < 4; row++)
-		rowright_counter[row] = 0;
-		rowleft_counter[row] = 0;
+    // Initialize arrays
+    for (row = 0; row < 4; row++)
+    {
+        (*rowleft_counter)[row][0] = 0;
+        (*rowright_counter)[row][0] = 0;
+    }
 
-	return (0);
+    return 0;
 }
+
+
 
 
 
@@ -509,11 +528,9 @@ int ft_check_count_end(int **board, int *colup_input, int *coldown_input, int *r
 
 
 
-int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter) {
+int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter, int row, int col) {
 	// Comprueba que el número que se va a poner en esa casilla cumple con todas las condiciones.
 	int	itsok;
-	int	row;
-	int	col;
 	itsok = 1;
 
 	if (ft_check_non_repeated(board, row, col) == 1)
@@ -532,74 +549,43 @@ int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *
 // -----------------------------------------
 
 // Resolución
+int ft_solve(int ***board, int **colup_counter, int **coldown_counter, int **rowleft_counter, int **rowright_counter, int row, int col, int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int remaining_heights[4][4][4], int remaining_heights_row[4][4])
+{
+    if (row == -1)
+        return 0;
+    if (row == 4)
+        return 1;
+    if (col == -1)
+        return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row - 1, 3, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
+    if (col == 4)
+        return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row + 1, 0, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
 
-int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowleft_counter, int	*rowright_counter, int row, int col,  int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int remaining_heights[4][4][4], int remaining_heights_row[4][4]) {
+    int height = 0;
 
+    // Find the first available height
+    while (height < 4 && remaining_heights[row][col][height] == 0)
+        height++;
 
-	//  Resolvemos el problema con el algoritmo que hemos pensado.
+    if (height == 4)
+        return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row, col - 1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
+    else
+    {
+        remaining_heights_row[row][col] = 0;
+        remaining_heights[row][col + 1][height] = 0;
+        (*board)[row][col] = height + 1;
 
-	printf("row: %d, col: %d\n", row, col);
-	
+        ft_vision(*board, row, col, *colup_counter, *coldown_counter, *rowleft_counter, *rowright_counter);
 
-	// printf("holi");
-
-	int height;
-
-	height = 0;
-
-
-	printf("holi");
-
-	// Empezamos en la casilla row, col
-	// Si el valor de la casilla es 0, entonces probamos a ponerle el primer elemento que la lista remaining_heights_row indique que está disponible. Usualmente será el 1. 
-	// Si el valor de la casilla es distinto de 0, entonces pasamos a la siguiente casilla, sumando 1 a la columna. Si la columna es 4, entonces pasamos a la siguiente fila, sumando 1 a la fila y poniendo la columna a 0. Si la casilla tiene el valor `altura`, entonces ponemos a 0 la entrada de remaining_heights_row que corresponda a esa fila y a esa altura, es decir, remaining_heights_row[row][altura-1] = 0 (porque la altura 1 está en la posición 0, la altura 2 en la posición 1, etc.).
-
-	if (row == -1)
-		return (0);
-	if (row == 4)
-		return (1);
-	if (col == -1)
-		return (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row -1, 3, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row));
-	if (col == 4)
-		return (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row + 1, 0, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row));
-	if (board[row][col] != 0)
-	{
-		// ponemos la altura de esta posición a 0 en la lista de alturas disponibles por fila y en la lista de alturas disponibles por para la SIGUIENTE casilla (cuidado de no hacerlo con la presente casilla)
-		remaining_heights_row[row][board[row][col]-1] = 0;
-		remaining_heights[row][col+1][board[row][col]-1] = 0;
-		return (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row, col + 1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row));
-	}
-	else
-	{
-		// Ponemos el primer la altura correspondiente a la primera entrada no nula de remaining_heights[row][col] y ponemos dicha entrada a 0. Ponemos a 0 la entrada correspondiente a la altura en remaining_heights_row[row][].
-		while ((height < 4) && (remaining_heights[row][col][height] == 0))
-			height++;
-		if (height == 4)
-			// no hay altura disponible para esta casilla, así que tenemos que volver atrás
-			return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row , col - 1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
-		else
-		{
-			// ponemos la altura de esta posición a 0 en la lista de alturas disponibles por fila y en la lista de alturas disponibles por para la SIGUIENTE casilla (cuidado de no hacerlo con la presente casilla)
-			remaining_heights_row[row][height] = 0;
-			remaining_heights[row][col+1][height] = 0;
-			board[row][col] = height + 1;
-			printf("row: %d, col: %d, height: %d\n", row, col, height + 1);
-
-			// miramos cuántas cajas ven los de alrededor
-			ft_vision(board, row, col, colup_counter, coldown_counter, rowleft_counter, rowright_counter);
-			// comprobamos que todo está bien
-			if (ft_check_everything(board, colup_input, coldown_input, rowleft_input, rowright_input, colup_counter, coldown_counter, rowleft_counter, rowright_counter) == 0)
-				// si no está bien, volvemos atrás
-				return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter,row, col -1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
-			else
-				// si está bien, seguimos adelante
-				return (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row, col + 1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row));
-		}
-	}
-
-
-	return (1);
-
+        if (ft_check_everything(*board, colup_input, coldown_input, rowleft_input, rowright_input, *colup_counter, *coldown_counter, *rowleft_counter, *rowright_counter, row, col) == 0)
+        {
+            remaining_heights_row[row][col] = 1;
+            remaining_heights[row][col + 1][height] = 1;
+            (*board)[row][col] = 0;
+            return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row, col - 1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
+        }
+        else
+            return ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, row, col + 1, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row);
+    }
 }
 
 
@@ -626,10 +612,10 @@ int main(void) {
 	// Important variables
 
 	int		**board;
-	int		*colup_counter;
-	int		*coldown_counter;
-	int		*rowleft_counter;
-	int		*rowright_counter;
+	int		**colup_counter;
+	int		**coldown_counter;
+	int		**rowleft_counter;
+	int		**rowright_counter;
 	int		remaining_heights[4][4][4];
 	int		remaining_heights_row[4][4];
 
@@ -706,13 +692,14 @@ int main(void) {
 
 
 	// Allocate memory for the arrays
-	mallocation(board, colup_counter, coldown_counter,rowleft_counter,rowright_counter);
+mallocation(&board, &colup_counter, &coldown_counter, &rowleft_counter, &rowright_counter);
 
 	// -----------------------------------------
 
 	// Si todo va bien, pinta el board usando la función write.
-
-	if (ft_solve(board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, 0, 0, 	colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, 	remaining_heights_row))
+	row = 0;
+	col = 0;
+	if (ft_solve(&board, colup_counter, coldown_counter, rowleft_counter, rowright_counter, 0, 0, colup_input, coldown_input, rowleft_input, rowright_input, remaining_heights, remaining_heights_row))
 	{
 		// print array
 		for (row = 0; row < 4; row++)
