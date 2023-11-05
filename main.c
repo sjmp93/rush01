@@ -12,6 +12,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 
 // We first declare the functions and the variables we are going to use
@@ -25,10 +26,13 @@
 
 int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter)
 {
+	int	row;
+	int	col;
+
 	// Allocate memory for the array board
 	board = malloc(4 * sizeof(int *));
 	// Allocate memory for each row
-	for (row = 0; row < 4; row++)
+		for (row = 0; row < 4; row++)
 		board[row] = malloc(4 * sizeof(int));
 	// Initialize array
 	for (row = 0; row < 4; row++)
@@ -37,13 +41,13 @@ int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowl
 
 
 	// Allocate memory for the array colup_counter
-	col_counter = malloc(4 * sizeof(int *));
+	colup_counter = malloc(4 * sizeof(int *));
 	// Allocate memory for the array coldown_counter
 	coldown_counter = malloc(4 * sizeof(int *));
 
 	// Initialize arrays
 	for (col = 0; col < 4; col++)
-		col_counter[col] = 0;
+		colup_counter[col] = 0;
 		coldown_counter[col] = 0;
 
 
@@ -56,6 +60,8 @@ int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowl
 	for (row = 0; row < 4; row++)
 		rowright_counter[row] = 0;
 		rowleft_counter[row] = 0;
+
+	return (0);
 }
 
 
@@ -67,12 +73,13 @@ int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowl
 
 // Vision
 
-int ft_vision_up(int **board, int col, int *colup_counter) {
+void ft_vision_up(int **board, int col, int *colup_counter) {
 
 	// 1. Arriba (colup_counter)
 		// Cuenta cuántas casillas en esa columna cumplen que su valor de board es mayor que el de todas las que están encima de ella.
 
 	int	i;
+	int	j;
 	int count;
 	int itsbigger;
 	i = 0;
@@ -98,15 +105,18 @@ int ft_vision_up(int **board, int col, int *colup_counter) {
 	}
 	colup_counter[col] = count;
 
+
+
 }
 
 
-int ft_vision_down(int **board, int col, int *coldown_counter) {
+void ft_vision_down(int **board, int col, int *coldown_counter) {
 
 	// 2. Abajo (coldown_counter)
 		// Cuenta cuántas casillas en esa columna cumplen que su valor de board es mayor que el de todas las que están debajo de ella.
 
 	int	i;
+	int	j;
 	int count;
 	int itsbigger;
 	i = 0;
@@ -132,12 +142,13 @@ int ft_vision_down(int **board, int col, int *coldown_counter) {
 	coldown_counter[col] = count;
 }
 
-int ft_vision_left(int **board, int row, int *rowleft_counter) {
+void ft_vision_left(int **board, int row, int *rowleft_counter) {
 	// 3. Izquierda (rowleft_counter)
 		// Cuenta cuántas casillas en esa fila cumplen que su valor de board es mayor que el de todas las que están a su izquierda.
 
 
 	int	i;
+	int	j;
 	int count;
 	int itsbigger;
 	i = 0;
@@ -166,11 +177,12 @@ int ft_vision_left(int **board, int row, int *rowleft_counter) {
 }
 
 
-int ft_vision_right(int **board, int row, int *rowright_counter) {
+void ft_vision_right(int **board, int row, int *rowright_counter) {
 	// 4. Derecha (rowright_counter)
 		// Cuenta cuántas casillas en esa fila cumplen que su valor de board es mayor que el de todas las que están a su derecha.
 
 	int	i;
+	int	j;
 	int count;
 	int itsbigger;
 	i = 0;
@@ -196,7 +208,6 @@ int ft_vision_right(int **board, int row, int *rowright_counter) {
 
 	rowright_counter[row] = count;
 
-	return (0);
 }
 
 // TODAS
@@ -262,9 +273,9 @@ int ft_check_repeated(int **board, int row, int col) {
 	int itsrepeated;
 	itsrepeated = 0;
 
-	if (ft_check_non_repeated_in_row(board, row, col) == 1)
+	if (ft_check_repeated_in_row(board, row, col) == 1)
 		itsrepeated = 1;
-	if (ft_check_non_repeated_in_col(board, row, col) == 1)
+	if (ft_check_repeated_in_col(board, row, col) == 1)
 		itsrepeated = 1;
 
 	return (itsrepeated);
@@ -504,7 +515,9 @@ int ft_check_count_end(int **board, int *colup_input, int *coldown_input, int *r
 
 int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int *colup_counter, int *coldown_counter, int *rowleft_counter, int *rowright_counter) {
 	// Comprueba que el número que se va a poner en esa casilla cumple con todas las condiciones.
-	int itsok;
+	int	itsok;
+	int	row;
+	int	col;
 	itsok = 1;
 
 	if (ft_check_non_repeated(board, row, col) == 1)
@@ -515,8 +528,7 @@ int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *
 		itsok = 1;
 	else
 		return (0);
-	if ()
-
+// if?
 	return (itsok);
 }
 
@@ -526,7 +538,7 @@ int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *
 
 // Resolución
 
-int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowleft_counter, int		*rowright_counter, int row, int col,  int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int ***remaining_heights, int **remaining_heights_row) {
+int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowleft_counter, int		*rowright_counter, int row, int col,  int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int remaining_heights[4][4][4], int remaining_heights_row[4][4]) {
 
 
 	//  Resolvemos el problema con el algoritmo que hemos pensado.
@@ -535,8 +547,6 @@ int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowlef
 	
 
 	int height;
-	int row;
-	int col;
 	int tempheight;
 	height = 0;
 	tempheight = 0;
@@ -595,41 +605,43 @@ int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowlef
 }
 
 
-main(int argc, char *argv[]) {
+int main(void) {
 
-// Variables
-// -----------------------------------------
-
-int		colup_input[4];
-int		coldown_input[4];
-int		rowleft_input[4];
-int		rowright_input[4];
-int		row;
-int		col;
-int		yesno;
-int		height;
-
-// -----------------------------------------
-
-// Important variables
-
+	// Variables
+	// -----------------------------------------
+	
+	int		colup_input[4];
+	int		coldown_input[4];
+	int		rowleft_input[4];
+	int		rowright_input[4];
+	int		row;
+	int		col;
+	int		yesno;
+	int		height;
+	
+	// -----------------------------------------
+	
+	// Important variables
+	
 	int		**board;
 	int		*colup_counter;
 	int		*coldown_counter;
 	int		*rowleft_counter;
 	int		*rowright_counter;
+	int		remaining_heights[4][4][4];
+	int		remaining_heights_row[4][4];
 
 
 
-	// Allocate memory for the array remaining_heights
-	remaining_heights = malloc(4 * sizeof(int *));
-	// Allocate memory for the first dimension
-	for (row = 0; row < 4; row++)
-		remaining_heights[row] = malloc(4 * sizeof(int));
-	// Allocate memory for the second dimension
-	for (row = 0; row < 4; row++)
-		for (col = 0; col < 4; col++)
-			remaining_heights[row][col] = malloc(4 * sizeof(int));
+	// // Allocate memory for the array remaining_heights
+	// remaining_heights = malloc(4 * sizeof(int *));
+	// // Allocate memory for the first dimension
+	// for (row = 0; row < 4; row++)
+	// 	remaining_heights[row] = malloc(4 * sizeof(int));
+	// // Allocate memory for the second dimension
+	// for (row = 0; row < 4; row++)
+	// 	for (col = 0; col < 4; col++)
+	// 		remaining_heights[row][col] = malloc(4 * sizeof(int));
 	// Initialize array
 	for (row = 0; row < 4; row++)
 		for (col = 0; col < 4; col++)
@@ -638,11 +650,11 @@ int		height;
 			// todas las entradas están disponibles, por eso se inicializan a 1
 
 
-	// Allocate memory for the array remaining_heights_row
-	remaining_heights_row = malloc(4 * sizeof(int *));
-	// Allocate memory for the first dimension
-	for (row = 0; row < 4; row++)
-		remaining_heights_row[row] = malloc(4 * sizeof(int));
+	// // Allocate memory for the array remaining_heights_row
+	// remaining_heights_row = malloc(4 * sizeof(int *));
+	// // Allocate memory for the first dimension
+	// for (row = 0; row < 4; row++)
+	// 	remaining_heights_row[row] = malloc(4 * sizeof(int));
 	// Initialize array
 	for (row = 0; row < 4; row++)
 		for (col = 0; col < 4; col++)
@@ -653,17 +665,44 @@ int		height;
 
 	// -----------------------------------------
 
-	colup_input = [4, 3, 2, 1];
-	coldown_input = [1, 2, 2, 2];
 
-	rowleft_input = [4, 3, 2, 1];
-	rowright_input = [1, 2, 2, 2];
+
+
+	// colup_input = [4, 3, 2, 1];
+	// coldown_input = [1, 2, 2, 2];
+
+	// rowleft_input = [4, 3, 2, 1];
+	// rowright_input = [1, 2, 2, 2];
+
+
+	colup_input[0] = 4;
+	colup_input[1] = 3;
+	colup_input[2] = 2;
+	colup_input[3] = 1;
+
+	coldown_input[0] = 1;
+	coldown_input[1] = 2;
+	coldown_input[2] = 2;
+	coldown_input[3] = 2;
+
+	rowleft_input[0] = 4;
+	rowleft_input[1] = 3;
+	rowleft_input[2] = 2;
+	rowleft_input[3] = 1;
+
+	rowright_input[0] = 1;
+	rowright_input[1] = 2;
+	rowright_input[2] = 2;
+	rowright_input[3] = 2;
+
+
+
 
 	// -----------------------------------------
 
 
 	// Allocate memory for the arrays
-	mallocation(board, remaining_heights, remaining_heights_row, colup_counter, coldown_counter, 	rowleft_counter, rowright_counter);
+	mallocation(board, colup_counter, coldown_counter,rowleft_counter,rowright_counter);
 
 	// -----------------------------------------
 
