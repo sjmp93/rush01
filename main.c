@@ -67,10 +67,6 @@ int mallocation(int **board, int *colup_counter, int *coldown_counter, int *rowl
 
 
 
-
-
-
-
 // Vision
 
 void ft_vision_up(int **board, int col, int *colup_counter) {
@@ -222,7 +218,7 @@ int ft_vision(int **board, int row, int col, int *colup_counter, int *coldown_co
 
 	return (0);
 }
-	
+
 
 
 
@@ -528,7 +524,6 @@ int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *
 		itsok = 1;
 	else
 		return (0);
-// if?
 	return (itsok);
 }
 
@@ -538,20 +533,20 @@ int ft_check_everything(int **board, int *colup_input, int *coldown_input, int *
 
 // Resolución
 
-int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowleft_counter, int		*rowright_counter, int row, int col,  int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int remaining_heights[4][4][4], int remaining_heights_row[4][4]) {
+int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowleft_counter, int	*rowright_counter, int row, int col,  int *colup_input, int *coldown_input, int *rowleft_input, int *rowright_input, int remaining_heights[4][4][4], int remaining_heights_row[4][4]) {
 
 
 	//  Resolvemos el problema con el algoritmo que hemos pensado.
 
-
+	printf("row: %d, col: %d\n", row, col);
 	
 
 	int height;
-	int tempheight;
+
 	height = 0;
-	tempheight = 0;
-	row = 0;
-	col = 0;
+
+
+	printf("holi");
 
 	// Empezamos en la casilla row, col
 	// Si el valor de la casilla es 0, entonces probamos a ponerle el primer elemento que la lista remaining_heights_row indique que está disponible. Usualmente será el 1. 
@@ -586,6 +581,7 @@ int ft_solve(int	**board, int	*colup_counter,	int	*coldown_counter,	int		*rowlef
 			remaining_heights_row[row][height] = 0;
 			remaining_heights[row][col+1][height] = 0;
 			board[row][col] = height + 1;
+			printf("row: %d, col: %d, height: %d\n", row, col, height + 1);
 
 			// miramos cuántas cajas ven los de alrededor
 			ft_vision(board, row, col, colup_counter, coldown_counter, rowleft_counter, rowright_counter);
@@ -609,7 +605,9 @@ int main(void) {
 
 	// Variables
 	// -----------------------------------------
-	
+
+	printf("Declarando variables: ");
+
 	int		colup_input[4];
 	int		coldown_input[4];
 	int		rowleft_input[4];
@@ -618,11 +616,13 @@ int main(void) {
 	int		col;
 	int		yesno;
 	int		height;
-	
+
 	// -----------------------------------------
-	
+
+
+	printf("Declarando variables importantes: ");
 	// Important variables
-	
+
 	int		**board;
 	int		*colup_counter;
 	int		*coldown_counter;
@@ -630,6 +630,8 @@ int main(void) {
 	int		*rowright_counter;
 	int		remaining_heights[4][4][4];
 	int		remaining_heights_row[4][4];
+
+
 
 
 
